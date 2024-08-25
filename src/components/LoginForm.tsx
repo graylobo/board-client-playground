@@ -4,16 +4,20 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { login } from "../lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { setAuthInfo } = useAuth();
+
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("username", username);
+      setAuthInfo(true, username);
       router.push("/");
     },
   });

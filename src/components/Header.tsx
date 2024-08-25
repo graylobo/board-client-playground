@@ -1,26 +1,17 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
+  const { isLoggedIn, username, setAuthInfo } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUsername = localStorage.getItem("username");
-    setIsLoggedIn(!!token);
-    setUsername(storedUsername || "");
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    setIsLoggedIn(false);
-    setUsername("");
+    setAuthInfo(false, "");
     router.push("/");
   };
 
