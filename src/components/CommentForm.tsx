@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createComment } from "@/lib/api";
+import { createComment } from "../lib/api";
 
-export default function CommentForm({ postId }: { postId: number }) {
+interface CommentFormProps {
+  postId: number;
+  parentId?: number;
+}
+
+export default function CommentForm({ postId, parentId }: CommentFormProps) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
 
@@ -18,16 +23,18 @@ export default function CommentForm({ postId }: { postId: number }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({ content, postId });
+    mutation.mutate({ content, postId, parentId });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mt-4">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write a comment..."
         className="w-full p-2 border rounded"
+        rows={3}
+        placeholder="Write a comment..."
+        required
       />
       <button type="submit" className="mt-2 bg-blue-500 text-white p-2 rounded">
         Submit Comment
