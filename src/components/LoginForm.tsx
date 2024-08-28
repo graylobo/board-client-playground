@@ -18,7 +18,7 @@ export default function LoginForm() {
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("username", username);
       setAuthInfo(true, username);
-      router.push("/");
+      router.push("/posts");
     },
   });
 

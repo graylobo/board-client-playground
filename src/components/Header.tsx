@@ -1,8 +1,10 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { validateToken } from "@/lib/api";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Header() {
   const { isLoggedIn, username, setAuthInfo } = useAuth();
@@ -14,6 +16,26 @@ export default function Header() {
     setAuthInfo(false, "");
     router.push("/");
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const { isValid, user } = await validateToken();
+          if (isValid) {
+            setAuthInfo(true, user.username);
+          } else {
+            handleLogout();
+          }
+        }
+      } catch (error) {
+        handleLogout();
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   return (
     <header className="bg-gray-800 text-white p-4">

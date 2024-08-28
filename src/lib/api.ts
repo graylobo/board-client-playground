@@ -27,6 +27,9 @@ export const updatePost = (
 export const deletePost = (id: number) =>
   api.delete(`/posts/${id}`).then((res) => res.data);
 
+export const validateToken = () =>
+  api.get("/auth/validate").then((res) => res.data);
+
 export const getComments = (postId: number) =>
   api.get(`/comments/post/${postId}`).then((res) => res.data);
 export const createComment = (data: {
