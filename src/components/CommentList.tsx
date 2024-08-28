@@ -47,7 +47,7 @@ function Comment({ comment, postId }: { comment: any; postId: number }) {
   );
 }
 
-export default function CommentList({ postId }: CommentProps) {
+export default function CommentList({ postId }: { postId: number }) {
   const {
     data: comments,
     isLoading,
@@ -64,9 +64,13 @@ export default function CommentList({ postId }: CommentProps) {
   return (
     <div>
       <h2 className="text-xl font-bold mt-8 mb-4">Comments</h2>
-      {comments.map((comment: any) => (
-        <Comment key={comment.id} comment={comment} postId={postId} />
-      ))}
+      {comments && comments.length > 0 ? (
+        comments.map((comment: any) => (
+          <Comment key={comment.id} comment={comment} postId={postId} />
+        ))
+      ) : (
+        <p>No comments yet.</p>
+      )}
     </div>
   );
 }
