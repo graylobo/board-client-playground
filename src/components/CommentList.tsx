@@ -1,16 +1,16 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getComments, createComment, likeComment } from "../lib/api";
+import { likeComment } from "../lib/api";
 import CommentForm from "./CommentForm";
 
 interface CommentProps {
+  comment: any;
   postId: number;
-  parentId?: number;
 }
 
-function Comment({ comment, postId }: { comment: any; postId: number }) {
+function Comment({ comment, postId }: CommentProps) {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const queryClient = useQueryClient();
 
@@ -47,20 +47,13 @@ function Comment({ comment, postId }: { comment: any; postId: number }) {
   );
 }
 
-export default function CommentList({ postId }: { postId: number }) {
-  const {
-    data: comments,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["comments", postId],
-    queryFn: () => getComments(postId),
-  });
+type CommentListProps = {
+  postId: number;
+  comments: any[];
+};
 
-  if (isLoading) return <div>Loading comments...</div>;
-  if (error)
-    return <div>Error loading comments: {(error as Error).message}</div>;
-
+export default function CommentList({ postId, comments }: CommentListProps) {
+  console.log("commentscomments", comments);
   return (
     <div>
       <h2 className="text-xl font-bold mt-8 mb-4">Comments</h2>

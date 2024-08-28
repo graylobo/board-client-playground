@@ -30,8 +30,6 @@ export const deletePost = (id: number) =>
 export const validateToken = () =>
   api.get("/auth/validate").then((res) => res.data);
 
-export const getComments = (postId: number) =>
-  api.get(`/comments/post/${postId}`).then((res) => res.data);
 export const createComment = (data: {
   content: string;
   postId: number;

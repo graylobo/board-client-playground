@@ -61,7 +61,7 @@ export default function PostDetailPage() {
         </div>
       )}
       <CommentForm postId={postId} />
-      <CommentList key={postId} postId={postId} />
+      <CommentList key={postId} postId={postId} comments={post.comments} />
     </div>
   );
 }
