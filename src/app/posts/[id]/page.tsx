@@ -19,6 +19,7 @@ export default function PostDetailPage() {
     data: post,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["post", postId],
     queryFn: () => getPost(postId),
@@ -60,7 +61,7 @@ export default function PostDetailPage() {
           </button>
         </div>
       )}
-      <CommentForm postId={postId} />
+      <CommentForm postId={postId} refetch={refetch} />
       <CommentList key={postId} postId={postId} comments={post.comments} />
     </div>
   );

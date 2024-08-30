@@ -7,9 +7,14 @@ import { createComment } from "../lib/api";
 interface CommentFormProps {
   postId: number;
   parentId?: number;
+  refetch: () => void;
 }
 
-export default function CommentForm({ postId, parentId }: CommentFormProps) {
+export default function CommentForm({
+  postId,
+  parentId,
+  refetch,
+}: CommentFormProps) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
 
@@ -18,6 +23,7 @@ export default function CommentForm({ postId, parentId }: CommentFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postId] });
       setContent("");
+      refetch();
     },
   });
 
@@ -25,7 +31,6 @@ export default function CommentForm({ postId, parentId }: CommentFormProps) {
     e.preventDefault();
     mutation.mutate({ content, postId, parentId });
   };
-
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <textarea
