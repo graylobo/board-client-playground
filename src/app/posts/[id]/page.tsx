@@ -7,6 +7,8 @@ import CommentList from "../../../components/CommentList";
 import CommentForm from "../../../components/CommentForm";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { useRefetchStore } from "@/store/refetch-store";
+import { useEffect } from "react";
 
 export default function PostDetailPage() {
   const params = useParams();
@@ -14,7 +16,7 @@ export default function PostDetailPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isLoggedIn, username } = useAuth();
-
+  const setRefetch = useRefetchStore((state) => state.setRefetch);
   const {
     data: post,
     isLoading,
@@ -24,6 +26,10 @@ export default function PostDetailPage() {
     queryKey: ["post", postId],
     queryFn: () => getPost(postId),
   });
+
+  useEffect(() => {
+    setRefetch(refetch);
+  }, []);
 
   const deleteMutation = useMutation({
     mutationFn: deletePost,
@@ -41,7 +47,7 @@ export default function PostDetailPage() {
     <div className="max-w-2xl mx-auto mt-8">
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <p className="text-sm text-gray-500 mb-4">
-        Author: {post.author.username} | Posted on:{" "}
+        Author: {post.author.username} | Posted on:
         {new Date(post.createdAt).toLocaleDateString()}
       </p>
       <p className="mb-8">{post.content}</p>
@@ -61,7 +67,7 @@ export default function PostDetailPage() {
           </button>
         </div>
       )}
-      <CommentForm postId={postId} refetch={refetch} />
+      <CommentForm postId={postId} />
       <CommentList key={postId} postId={postId} comments={post.comments} />
     </div>
   );

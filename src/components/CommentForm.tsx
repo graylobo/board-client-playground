@@ -3,21 +3,17 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createComment } from "../lib/api";
+import { useRefetchStore } from "@/store/refetch-store";
 
 interface CommentFormProps {
   postId: number;
   parentId?: number;
-  refetch: () => void;
 }
 
-export default function CommentForm({
-  postId,
-  parentId,
-  refetch,
-}: CommentFormProps) {
+export default function CommentForm({ postId, parentId }: CommentFormProps) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
-
+  const refetch = useRefetchStore((state) => state.refetch);
   const mutation = useMutation({
     mutationFn: createComment,
     onSuccess: () => {
